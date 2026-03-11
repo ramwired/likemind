@@ -1,14 +1,21 @@
 import { useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailId, setEmailId] = useState("khabib@example.com");
+  const [password, setPassword] = useState("Eagle29");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "http://localhost:3000/login",
+      const res = await axios.post(
+        BASE_URL + "/login",
         {
           emailId,
           password,
@@ -17,13 +24,17 @@ const Login = () => {
           withCredentials: true,
         },
       );
+      dispatch(addUser(res.data));
+      if (res.status === 200) {
+        navigate("/feed");
+      }
     } catch (err) {
       console.error(err);
     }
   };
   return (
     <>
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex-1 flex items-center justify-center">
         <form
           className="w-full sm:w-87.5 text-center bg-white/6 border border-white/10 rounded-2xl px-8"
           onSubmit={handleSubmit}
