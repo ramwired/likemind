@@ -8,6 +8,7 @@ import { addUser } from "../utils/userSlice";
 const Login = () => {
   const [emailId, setEmailId] = useState("khabib@example.com");
   const [password, setPassword] = useState("Eagle29");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,8 +30,18 @@ const Login = () => {
         navigate("/feed");
       }
     } catch (err) {
-      console.error(err);
+      if (err.response?.status === 401) {
+        setError("Invalid email or password");
+      }
     }
+  };
+  const handleEmailId = (e) => {
+    setEmailId(e.target.value);
+    setError("");
+  };
+  const handlePassword= (e) => {
+    setPassword(e.target.value);
+    setError("");
   };
   return (
     <>
@@ -44,6 +55,8 @@ const Login = () => {
           <p className="text-gray-400 text-sm mt-2">
             Please sign in to continue
           </p>
+
+          <p className=" text-red-400 mt-2">{error}</p>
 
           <div className="flex items-center w-full mt-4 bg-white/5 ring-2 ring-white/10 focus-within:ring-indigo-500/60 h-12 rounded-full overflow-hidden pl-6 gap-2 transition-all ">
             <svg
@@ -68,7 +81,7 @@ const Login = () => {
               className="w-full bg-transparent text-white placeholder-white/60 border-none outline-none "
               required
               value={emailId}
-              onChange={(e) => setEmailId(e.target.value)}
+              onChange={handleEmailId}
             />
           </div>
 
@@ -95,11 +108,11 @@ const Login = () => {
               className="w-full bg-transparent text-white placeholder-white/60 border-none outline-none"
               required
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePassword}
             />
           </div>
 
-          <div className="mt-4 text-left">
+          <div className=" text-left mt-4">
             <button
               className="text-sm text-indigo-400 hover:underline"
               type="button"

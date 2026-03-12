@@ -12,7 +12,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
     res.send(req.user);
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(401).send("Pls login!!");
   }
 });
 profileRouter.patch("/profile/edit", userAuth, async (req, res) => {

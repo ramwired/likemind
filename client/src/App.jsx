@@ -4,6 +4,8 @@ import Login from "./pages/Login";
 import Feed from "./pages/Feed";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -12,8 +14,11 @@ function App() {
         <BrowserRouter basename="/">
           <Routes>
             <Route path="/" element={<Body />}>
-              <Route path="/login" element={<Login />} />
-              <Route path="/feed" element={<Feed />} />
+              <Route path="login" element={<Login />} />
+              <Route element={<ProtectedRoute/>}>
+                <Route path="feed" element={<Feed />} />
+                <Route path="profile" element={<Profile />} />
+              </Route>
             </Route>
           </Routes>
         </BrowserRouter>
