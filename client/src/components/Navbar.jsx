@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
   // Glassmorphism effect: white background at 80% opacity with a blur.
   // Subtle bottom border using Pastel Petal color.
-
+  const navigate = useNavigate();
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-[#ffcbdd]/60 shadow-[0_1px_3px_rgba(255,203,221,0.2)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -136,7 +138,10 @@ const Navbar = () => {
 
             <div className="hidden sm:block h-8 w-px bg-[#ffcbdd]/60"></div>
 
-            <button className="flex items-center gap-2 focus:outline-none group">
+            <button
+              className="flex items-center gap-2 focus:outline-none group"
+              onClick={() => navigate("/profile")}
+            >
               <div className="relative p-0.5 rounded-full bg-linear-to-tr from-[#fb4b4e] to-[#7c0b2b] group-hover:shadow-md transition-all">
                 <img
                   src="https://i.pinimg.com/236x/47/29/8f/47298fa216d3b8589663aaabbd0fef80.jpg"
@@ -144,20 +149,6 @@ const Navbar = () => {
                   className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white"
                 />
               </div>
-
-              <svg
-                className="hidden sm:block w-4 h-4 text-[#3e000c]/40 group-hover:text-[#3e000c] transition-colors"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2.5"
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
             </button>
 
             <button className="md:hidden flex items-center justify-center p-2 rounded-full text-[#3e000c]/70 hover:bg-[#ffcbdd]/40 hover:text-[#3e000c] transition-colors">
