@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const Profile = () => {
   const user = {
     firstName: "Bukayo",
@@ -10,14 +12,13 @@ const Profile = () => {
     profile:
       "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=600&auto=format&fit=crop",
     coverPhoto:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=400&auto=format&fit=crop",
     about:
-      "Passionate software developer exploring the MERN stack. I love building seamless user experiences and constantly learning new tools to push the boundaries of web architecture.",
+      "Passionate about building scalable backends and creating rich UIs with JSX and Tailwind CSS. When I'm off the keyboard, you can usually find me behind a lens, exploring cinematic software and directing short films to bring stories to life.",
     skills: ["React", "Node.js", "Express", "MongoDB", "Tailwind", "Figma"],
     vibe: {
       lookingFor: "Open source collaborators 🤝",
       listeningTo: "Starboy - The Weeknd",
-      // Swapped lime green for Strawberry Red
       statusColor: "bg-[#fb4b4e]",
     },
     prompts: [
@@ -38,26 +39,39 @@ const Profile = () => {
       "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=400&auto=format&fit=crop",
     ],
   };
-
+  const navigate = useNavigate();
   return (
-    // Swapped selection highlight to Pastel Petal & Night Bordeaux
-    <div className="min-h-screen bg-[#f3efe8] py-8 px-4 sm:px-8 font-sans text-[#1a1a1a] selection:bg-[#ffcbdd] selection:text-[#3e000c] flex justify-center items-start">
-      <div className="max-w-[1280px] w-full space-y-6">
-        {/* === BENTO GRID MAIN LAYOUT === */}
+    <div className="min-h-screen relative py-8 px-4 sm:px-8 font-sans text-[#3e000c] selection:bg-[#ffcbdd] selection:text-[#3e000c] flex justify-center items-start overflow-hidden bg-[#fdfafb]">
+      {/* === INNOVATIVE BACKGROUND === */}
+      <div className="fixed inset-0 z-0 pointer-events-none flex items-center justify-center overflow-hidden">
+        {/* Architectural Grid - Bumped opacity to 1a for more visibility */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3e000c1a_1px,transparent_1px),linear-gradient(to_bottom,#3e000c1a_1px,transparent_1px)] bg-[size:32px_32px]"></div>
+
+        {/* Glowing Mesh Orbs */}
+        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-[#ffcbdd] rounded-full mix-blend-multiply filter blur-[120px] opacity-70"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-[#fb4b4e] rounded-full mix-blend-multiply filter blur-[150px] opacity-15"></div>
+        <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-[#f8e9ed] rounded-full mix-blend-multiply filter blur-[120px] opacity-80"></div>
+      </div>
+
+      {/* === MAIN CONTENT WRAPPER === */}
+      <div className="max-w-[1280px] w-full space-y-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-2">
           {/* LEFT COLUMN: Controls & Vibe Ticket */}
           <div className="lg:col-span-3 flex flex-col gap-5">
             {/* Box 1: Actions Control Panel */}
-            <div className="bg-white border border-[#1a1a1a] rounded-[2rem] p-[22px] flex flex-col w-full h-auto">
+            <div className="bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-[22px] flex flex-col w-full h-auto">
               <div className="mb-5 mt-1.5">
-                <h3 className="text-xl font-medium tracking-tight text-[#1a1a1a]">
+                <h3 className="text-xl font-medium tracking-tight text-[#3e000c]">
                   Preferences
                 </h3>
               </div>
 
               <div className="flex flex-col gap-[11px]">
-                {/* Primary Action Button - Now uses Pastel Petal and Night Bordeaux */}
-                <button className="group w-full flex items-center justify-between px-[18px] py-[11px] rounded-xl border border-[#3e000c] bg-[#ffcbdd] hover:bg-[#3e000c] hover:text-[#ffcbdd] text-sm font-medium text-[#3e000c] transition-all duration-300 shadow-[2px_2px_0_#3e000c] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none">
+                {/* Primary Action Button */}
+                <button
+                  className="group w-full flex items-center justify-between px-[18px] py-[11px] rounded-xl border border-[#3e000c] bg-[#ffcbdd]/40 hover:bg-[#3e000c]/80 hover:text-[#ffcbdd] text-sm font-medium text-[#3e000c] transition-all duration-300 active:translate-x-0.5 active:translate-y-0.5"
+                  onClick={() => navigate("/edit")}
+                >
                   <span>Edit Profile</span>
                   <svg
                     className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
@@ -75,7 +89,7 @@ const Profile = () => {
                 </button>
 
                 {/* Secondary Action Button */}
-                <button className="w-full flex items-center gap-3 px-[18px] py-[11px] rounded-xl border border-transparent hover:border-[#1a1a1a] hover:bg-gray-50 text-sm font-medium text-gray-700 hover:text-[#1a1a1a] transition-colors">
+                <button className="w-full flex items-center gap-3 px-[18px] py-[11px] rounded-xl border border-transparent hover:border-[#3e000c] hover:bg-[#fff5f7] text-sm font-medium text-[#3e000c]/70 hover:text-[#3e000c] transition-colors">
                   <svg
                     className="w-4 h-4 opacity-70"
                     fill="none"
@@ -93,10 +107,10 @@ const Profile = () => {
                 </button>
               </div>
 
-              <div className="w-full h-[1px] bg-gray-200 my-[18px]"></div>
+              <div className="w-full h-[1px] bg-[#3e000c]/20 my-[18px]"></div>
 
-              {/* Danger Action Button - Hover text is already Strawberry Red */}
-              <button className="w-full flex items-center gap-3 px-[18px] py-2.5 text-sm font-bold text-gray-400 hover:text-[#fb4b4e] hover:bg-red-50 rounded-xl transition-colors">
+              {/* Danger Action Button */}
+              <button className="w-full flex items-center gap-3 px-[18px] py-2.5 text-sm font-bold text-[#3e000c]/50 hover:text-[#fb4b4e] hover:bg-[#fff5f7] rounded-xl transition-colors">
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -115,69 +129,73 @@ const Profile = () => {
             </div>
 
             {/* Box 2: Vibe Ticket */}
-            <div className="border border-[#1a1a1a] rounded-[2rem] bg-white relative flex flex-col w-full flex-1">
+            <div className="border border-[#3e000c] rounded-[2rem] bg-transparent relative flex flex-col w-full flex-1 shadow-sm hover:shadow-md transition-all duration-500 group">
               {/* Ticket Top Half */}
-              <div className="bg-[#e9e4d9] rounded-t-[2rem] p-6 pb-8">
-                <div className="flex justify-between items-start mb-6">
-                  <h2 className="text-4xl font-medium tracking-tighter leading-[1.1] text-[#1a1a1a]">
+              <div className="bg-[#fff5f7] backdrop-blur-sm rounded-t-[2rem] p-6 pb-8 relative overflow-hidden">
+                {/* --- DOT MATRIX BACKGROUND --- */}
+                <div
+                  className="absolute inset-0 opacity-[0.15] pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(#3e000c 1.5px, transparent 1.5px)",
+                    backgroundSize: "16px 16px",
+                  }}
+                ></div>
+
+                {/* Content */}
+                <div className="relative z-10 flex justify-between items-start mb-6">
+                  <h2 className="text-4xl font-medium tracking-tighter leading-[1.1] text-[#3e000c]">
                     Current
                     <br />
                     vibe
                   </h2>
-                  {/* Status tag changed to Pastel Petal and Night Bordeaux border/text */}
-                  <span className="bg-[#ffcbdd] border border-[#3e000c] text-[#3e000c] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest flex items-center gap-1.5 shrink-0 ml-2">
+                  <span className="bg-white border border-[#3e000c] text-[#3e000c] px-3 py-1 rounded-full text-[10px] font-bold tracking-widest flex items-center gap-1.5 shrink-0 ml-2 shadow-[2px_2px_0_#3e000c]">
                     <span
                       className={`w-2 h-2 rounded-full ${user.vibe.statusColor} animate-pulse`}
                     ></span>
                     LIVE
                   </span>
                 </div>
-                <div className="mt-2">
-                  <p className="text-sm font-medium text-gray-800 leading-tight mb-1">
+                <div className="relative z-10 mt-2">
+                  <p className="text-[11px] font-black uppercase tracking-wider text-[#3e000c]/50 leading-tight mb-1">
                     Looking for:
                   </p>
-                  <p className="text-base font-medium text-[#1a1a1a] leading-tight">
+                  <p className="text-lg font-medium text-[#3e000c] leading-tight bg-white/60 inline-block px-2 py-0.5 -ml-2 rounded-md backdrop-blur-sm">
                     {user.vibe.lookingFor}
                   </p>
                 </div>
               </div>
 
               {/* Ticket Divider Row */}
-              <div className="relative h-0 w-full flex items-center z-10">
-                <div className="absolute left-[-1px] w-5 h-8 bg-[#f3efe8] rounded-r-full border border-[#1a1a1a] border-l-0"></div>
-                <div className="w-full h-[1px] bg-[#1a1a1a]"></div>
-                <div className="absolute right-[-1px] w-5 h-8 bg-[#f3efe8] rounded-l-full border border-[#1a1a1a] border-r-0"></div>
+              <div className="relative h-0 w-full flex items-center z-20">
+                <div className="absolute left-[-1px] w-5 h-8 bg-[#fdfafb] rounded-r-full border border-[#3e000c] border-l-0"></div>
+                <div className="w-full border-t-2 border-dashed border-[#3e000c]/20"></div>
+                <div className="absolute right-[-1px] w-5 h-8 bg-[#fdfafb] rounded-l-full border border-[#3e000c] border-r-0"></div>
               </div>
 
               {/* Ticket Bottom Half */}
-              <div className="p-6 pt-8 rounded-b-[2rem] bg-white mt-auto">
-                <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-[#1a1a1a] mb-2">
+              <div className="p-6 pt-8 rounded-b-[2rem] bg-[#fff5f7] backdrop-blur-sm mt-auto relative overflow-hidden">
+                {/* --- DOT MATRIX BACKGROUND --- */}
+                <div
+                  className="absolute inset-0 opacity-[0.15] pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(#3e000c 1.5px, transparent 1.5px)",
+                    backgroundSize: "16px 16px",
+                  }}
+                ></div>
+                {/* Content */}
+                <div className="relative z-10 text-[11px] font-black uppercase tracking-widest text-[#3e000c]/50 mb-6">
                   <span>On Repeat</span>
-                  <span>Now</span>
                 </div>
-                <div className="w-full h-[1px] bg-[#1a1a1a] mb-6"></div>
-
-                <div className="flex justify-between items-end gap-2">
+                <div className="relative z-10 flex justify-between items-end gap-2">
                   <div className="flex flex-col min-w-0">
-                    <h4 className="text-4xl sm:text-[2.5rem] font-medium tracking-tighter leading-none mb-1 text-[#1a1a1a] truncate">
+                    <h4 className="text-4xl sm:text-[2.5rem] font-medium tracking-tighter leading-none mb-1 text-[#3e000c] truncate">
                       {user.vibe.listeningTo.split(" - ")[0]}
                     </h4>
-                    <p className="text-sm font-medium text-gray-500 truncate">
+                    <p className="text-sm font-bold text-[#3e000c]/60 truncate italic">
                       {user.vibe.listeningTo.split(" - ")[1]}
                     </p>
-                  </div>
-
-                  <div className="flex flex-col items-end gap-1.5 shrink-0">
-                    <div className="h-[46px] w-[46px] flex items-center justify-center bg-white rounded-md p-0.5 border border-gray-200 overflow-hidden">
-                      <img
-                        src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://open.spotify.com/"
-                        alt="QR Code Mockup"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#1a1a1a]">
-                      Spotify
-                    </span>
                   </div>
                 </div>
               </div>
@@ -187,17 +205,17 @@ const Profile = () => {
           {/* MIDDLE COLUMN: Avatar/Hero & Skills */}
           <div className="lg:col-span-4 flex flex-col gap-5">
             {/* Box 3: Main Identity */}
-            <div className="relative border border-[#1a1a1a] rounded-[2rem] overflow-hidden flex flex-col justify-end flex-1 group bg-white min-h-[300px]">
+            <div className="relative border border-[#3e000c] rounded-[2rem] overflow-hidden flex flex-col justify-end flex-1 group bg-[#f8e9ed] min-h-[300px]">
               <img
                 src={user.coverPhoto}
                 alt="Cover"
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
 
               <div className="relative z-10 p-6 sm:p-8 flex flex-col justify-end h-full">
                 <div className="flex items-center gap-4 mb-5">
-                  <div className="w-20 h-20 rounded-full border-2 border-[#1a1a1a] overflow-hidden bg-white shrink-0 shadow-lg">
+                  <div className="w-20 h-20 rounded-full border-2 border-white overflow-hidden bg-white shrink-0 shadow-lg">
                     <img
                       src={user.profile}
                       alt={user.firstName}
@@ -208,8 +226,7 @@ const Profile = () => {
                     <h2 className="text-4xl font-medium text-white tracking-tighter leading-none mb-1">
                       {user.firstName}
                     </h2>
-                    {/* Replaced yellow text with Pastel Petal */}
-                    <span className="text-sm font-bold tracking-widest uppercase text-white">
+                    <span className="text-sm font-bold tracking-widest uppercase text-[#ffcbdd]">
                       {user.age} yrs • {user.location.split(",")[0]}
                     </span>
                   </div>
@@ -221,13 +238,13 @@ const Profile = () => {
             </div>
 
             {/* Box 4: Skills & Interests Bento */}
-            <div className="bg-[#e7e3d9] border border-[#1a1a1a] rounded-[2rem] p-6 flex flex-col shrink-0">
+            <div className="bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-6 flex flex-col shrink-0">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-medium tracking-tight text-[#1a1a1a]">
+                <h3 className="text-2xl font-medium tracking-tight text-[#3e000c]">
                   Skills & Interests
                 </h3>
                 <svg
-                  className="w-6 h-6 text-[#1a1a1a] opacity-40"
+                  className="w-6 h-6 text-[#3e000c] opacity-40"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -243,10 +260,9 @@ const Profile = () => {
 
               <div className="flex flex-wrap gap-2 mt-auto">
                 {user.skills.map((skill, i) => (
-                  // Replaced black hover with Night Bordeaux and text with Pastel Petal
                   <span
                     key={i}
-                    className="px-3 py-1.5 bg-white/50 border border-[#1a1a1a] rounded-full text-xs font-semibold text-[#1a1a1a] hover:bg-[#3e000c] hover:text-[#ffcbdd] hover:border-[#3e000c] transition-all duration-300 cursor-default shadow-sm hover:shadow-md"
+                    className="px-3 py-1.5 bg-[#ffcbdd]/30 border border-[#3e000c] rounded-full text-xs font-semibold text-[#3e000c] hover:bg-[#3e000c] hover:text-[#ffcbdd] transition-all duration-300 cursor-default"
                   >
                     {skill}
                   </span>
@@ -255,38 +271,38 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Free Flowing Prompt & Bio */}
-          <div className="lg:col-span-5 relative flex flex-col justify-center py-6 px-6 sm:px-12 h-full overflow-hidden">
-            <div className="flex flex-col justify-center flex-1 relative z-10 w-full">
-              {/* Floating Tag - Using Pastel Petal and Night Bordeaux */}
-              <div className="mb-6 mt-2">
-                <span className="inline-block px-4 py-1.5 rounded-full border border-[#3e000c] bg-[#ffcbdd] text-[#3e000c] text-[10px] font-black uppercase tracking-widest shadow-[2px_2px_0_#3e000c] transform -rotate-2">
+          {/* RIGHT COLUMN: Free Flowing Prompt & Bio (Visually Lifted) */}
+          <div className="lg:col-span-5 relative flex flex-col justify-center py-4 px-6 sm:px-12 h-full overflow-hidden">
+            {/* Added pb-16 here to shift the vertical center point upwards! */}
+            <div className="flex flex-col justify-center flex-1 relative z-10 w-full h-full pb-16">
+              {/* Floating Tag */}
+              <div className="mb-1 shrink-0">
+                <span className="inline-block px-4 py-1.5 rounded-full border border-[#3e000c] bg-[#ffcbdd]/40 text-[#3e000c] text-[10px] font-black uppercase tracking-widest transform -rotate-2">
                   Featured Prompt ✨
                 </span>
               </div>
 
               {/* Question */}
-              <h2 className="text-4xl lg:text-5xl font-medium tracking-tighter text-[#1a1a1a] leading-[1.05] mb-6">
+              <h2 className="text-4xl lg:text-5xl font-medium tracking-tighter text-[#3e000c] leading-[1.05] mb-1 pb-1 shrink-0">
                 {user.prompts[0].question.replace("...", "")}
                 <span className="text-[#fb4b4e]">...</span>
               </h2>
 
               {/* Answer */}
-              <div className="flex gap-4 items-start mb-12">
-                {/* Quote mark is already Pastel Petal, untouched */}
+              <div className="flex gap-4 items-start mb-2 shrink-0">
                 <span className="text-6xl text-[#ffcbdd] font-serif leading-none pt-2 opacity-80 shrink-0">
                   "
                 </span>
-                <p className="text-2xl sm:text-[1.75rem] text-gray-800 font-serif italic leading-tight mt-2">
+                <p className="w-full text-2xl sm:text-[1.75rem] text-[#3e000c] font-serif italic leading-tight mt-2 p-2 -ml-2">
                   {user.prompts[0].answer}
                 </p>
               </div>
 
-              {/* Bio Section with Static SVG Divider */}
-              <div className="mt-auto pt-6">
-                {/* Decorative SVG: Swapped to Dark Amaranth */}
+              {/* Bio Section */}
+              <div className="mt-16 pt-0 pb-2 shrink-0">
+                {/* Decorative SVG */}
                 <svg
-                  className="w-16 h-3 mb-5 text-[#7c0b2b] opacity-80"
+                  className="w-16 h-3 mb-2 text-[#fb4b4e] opacity-80"
                   viewBox="0 0 100 20"
                   fill="none"
                   stroke="currentColor"
@@ -296,25 +312,25 @@ const Profile = () => {
                   <path d="M0 10 L 30 10 M 40 10 L 100 10" />
                 </svg>
 
-                <p className="text-base lg:text-lg font-medium text-gray-600 leading-relaxed max-w-md">
-                  <span className="text-[#1a1a1a] font-bold block mb-1">
+                <div className="flex flex-col max-w-md">
+                  <span className="text-[#3e000c] font-bold block mb-1">
                     About Me //
                   </span>
-                  {user.about}
-                </p>
+                  <p className="text-base lg:text-lg font-medium text-[#3e000c]/80 leading-relaxed w-full p-2 -ml-2">
+                    {user.about}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
           {/* === FULL-WIDTH GALLERY ROW === */}
-          <div className="lg:col-span-12 bg-white border border-[#1a1a1a] rounded-[2rem] p-6 flex flex-col gap-5 mt-2">
+          <div className="lg:col-span-12 bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-6 flex flex-col gap-5 mt-2">
             <div className="flex justify-between items-center px-2">
-              <h3 className="text-2xl font-medium tracking-tight leading-none">
-                Workspace &<br />
-                Moments
+              <h3 className="text-2xl font-medium tracking-tight text-[#3e000c] leading-none">
+                Camera Roll
               </h3>
-              {/* Swapped to Pastel Petal & Night Bordeaux */}
-              <span className="bg-[#ffcbdd] border border-[#3e000c] text-[#3e000c] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
+              <span className="bg-[#ffcbdd]/40 border border-[#3e000c] text-[#3e000c] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
                 8 Photos
               </span>
             </div>
@@ -323,7 +339,7 @@ const Profile = () => {
               {user.photos.map((photo, index) => (
                 <div
                   key={index}
-                  className="aspect-square rounded-2xl border border-[#1a1a1a] overflow-hidden group bg-gray-100 cursor-pointer"
+                  className="aspect-square rounded-2xl border border-[#3e000c] overflow-hidden group bg-gray-100 cursor-pointer"
                 >
                   <img
                     src={photo}

@@ -1,16 +1,37 @@
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  // Glassmorphism effect: white background at 80% opacity with a blur.
-  // Subtle bottom border using Pastel Petal color.
   const navigate = useNavigate();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleDropdownNavigation = (path) => {
+    navigate(path);
+    setIsProfileOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-[#ffcbdd]/60 shadow-[0_1px_3px_rgba(255,203,221,0.2)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
           {/* Left: Brand/Logo with Red String of Fate Effect */}
-          <div className="shrink-0 flex items-center cursor-pointer group relative">
-            {/* Bigger Infinity Knot — centered with LikeMind */}
+          <div
+            className="shrink-0 flex items-center cursor-pointer group relative"
+            onClick={() => navigate("/")}
+          >
+            {/* Infinity Knot */}
             <svg
               className="w-14 h-14 -mr-2 origin-center group-hover:scale-105 transition-transform duration-500 ease-out relative z-20"
               viewBox="0 0 40 40"
@@ -18,7 +39,7 @@ const Navbar = () => {
               stroke="currentColor"
               strokeLinecap="round"
               strokeLinejoin="round"
-              style={{ transform: "translateY(2px)" }} // small vertical nudge for cap-height alignment
+              style={{ transform: "translateY(2px)" }}
               aria-hidden="true"
             >
               <defs>
@@ -33,8 +54,7 @@ const Navbar = () => {
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
               </defs>
-
-              {/* Soft glow — subtle, not thick */}
+              {/* Soft glow */}
               <path
                 d="M12 20 C 4 12, 4 28, 12 20 C 20 12, 28 12, 28 20 C 28 28, 20 28, 12 20 Z"
                 stroke="#fb4b4e"
@@ -42,8 +62,7 @@ const Navbar = () => {
                 strokeOpacity="0.22"
                 filter="url(#string-glow)"
               />
-
-              {/* Core knot — thin & crisp */}
+              {/* Core knot */}
               <path
                 d="M12 20 C 4 12, 4 28, 12 20 C 20 12, 28 12, 28 20 C 28 28, 20 28, 12 20"
                 stroke="#d10000"
@@ -60,9 +79,8 @@ const Navbar = () => {
 
           {/* Center: Navigation Links */}
           <div className="hidden md:flex items-center space-x-1">
-            {/* Feed */}
-            <a
-              href="/feed"
+            <button
+              onClick={() => navigate("/feed")}
               className="group flex items-center px-4 py-2.5 rounded-full bg-[#ffcbdd]/40 text-[#7c0b2b] font-semibold transition-all"
             >
               <svg
@@ -79,11 +97,10 @@ const Navbar = () => {
                 />
               </svg>
               Feed
-            </a>
+            </button>
 
-            {/* Connections */}
-            <a
-              href="/connections"
+            <button
+              onClick={() => navigate("/connections")}
               className="group flex items-center px-4 py-2.5 rounded-full text-[#3e000c]/70 font-medium hover:bg-[#ffcbdd]/20 hover:text-[#3e000c] transition-all"
             >
               <svg
@@ -100,11 +117,10 @@ const Navbar = () => {
                 />
               </svg>
               Connections
-            </a>
+            </button>
 
-            {/* Requests */}
-            <a
-              href="/requests"
+            <button
+              onClick={() => navigate("/requests")}
               className="group flex items-center px-4 py-2.5 rounded-full text-[#3e000c]/70 font-medium hover:bg-[#ffcbdd]/20 hover:text-[#3e000c] transition-all relative"
             >
               <div className="relative mr-2">
@@ -121,13 +137,12 @@ const Navbar = () => {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-
                 <span className="absolute -top-1 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#d10000] text-[9px] font-bold text-white ring-2 ring-white">
                   3
                 </span>
               </div>
               Requests
-            </a>
+            </button>
           </div>
 
           {/* Right Side */}
@@ -138,19 +153,68 @@ const Navbar = () => {
 
             <div className="hidden sm:block h-8 w-px bg-[#ffcbdd]/60"></div>
 
-            <button
-              className="flex items-center gap-2 focus:outline-none group"
-              onClick={() => navigate("/profile")}
-            >
-              <div className="relative p-0.5 rounded-full bg-linear-to-tr from-[#fb4b4e] to-[#7c0b2b] group-hover:shadow-md transition-all">
-                <img
-                  src="https://i.pinimg.com/236x/47/29/8f/47298fa216d3b8589663aaabbd0fef80.jpg"
-                  alt="Profile"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white"
-                />
-              </div>
-            </button>
+            {/* Profile Avatar & Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className="flex items-center gap-2 focus:outline-none group"
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                aria-expanded={isProfileOpen}
+                aria-haspopup="true"
+              >
+                <div
+                  className={`relative p-0.5 rounded-full transition-all ${
+                    isProfileOpen
+                      ? "bg-linear-to-tr from-[#fb4b4e] to-[#7c0b2b] shadow-md"
+                      : "bg-transparent group-hover:bg-linear-to-tr group-hover:from-[#fb4b4e] group-hover:to-[#7c0b2b] group-hover:shadow-md"
+                  }`}
+                >
+                  <img
+                    src="https://i.pinimg.com/236x/47/29/8f/47298fa216d3b8589663aaabbd0fef80.jpg"
+                    alt="Profile"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white"
+                  />
+                </div>
+              </button>
 
+              {/* Dropdown Menu */}
+              {isProfileOpen && (
+                <div className="absolute right-0 mt-3 w-48 bg-white/95 backdrop-blur-xl border border-[#ffcbdd]/60 rounded-2xl shadow-lg py-2 z-50 transform opacity-100 scale-100 transition-all origin-top-right">
+                  <div className="px-4 py-2 border-b border-[#ffcbdd]/40 mb-1">
+                    <p className="text-sm font-semibold text-[#3e000c]">
+                      Jane Doe
+                    </p>
+                    <p className="text-xs text-[#7c0b2b]/70">
+                      jane@likemind.com
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => handleDropdownNavigation("/profile")}
+                    className="w-full text-left px-4 py-2 text-sm font-medium text-[#3e000c]/80 hover:bg-[#ffcbdd]/30 hover:text-[#7c0b2b] transition-colors"
+                  >
+                    View Profile
+                  </button>
+
+                  <button
+                    onClick={() => handleDropdownNavigation("/settings")}
+                    className="w-full text-left px-4 py-2 text-sm font-medium text-[#3e000c]/80 hover:bg-[#ffcbdd]/30 hover:text-[#7c0b2b] transition-colors"
+                  >
+                    Settings
+                  </button>
+
+                  <div className="h-px bg-[#ffcbdd]/40 my-1"></div>
+
+                  <button
+                    onClick={() => handleDropdownNavigation("/logout")}
+                    className="w-full text-left px-4 py-2 text-sm font-semibold text-[#d10000] hover:bg-[#ffcbdd]/30 transition-colors"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Menu Toggle */}
             <button className="md:hidden flex items-center justify-center p-2 rounded-full text-[#3e000c]/70 hover:bg-[#ffcbdd]/40 hover:text-[#3e000c] transition-colors">
               <svg
                 className="w-6 h-6"
