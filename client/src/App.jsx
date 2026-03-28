@@ -7,6 +7,8 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import AuthLayout from "./components/AuthLayout";
 import LandingNavbar from "./components/LandingNavbar";
+import Connections from "./pages/Connections";
+import Requests from "./pages/Requests";
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
           <Route path="feed" element={<Feed />}></Route>
           <Route path="edit" element={<EditProfile />}></Route>
           <Route path="profile" element={<Profile />}></Route>
+          <Route path="connections" element={<Connections />}></Route>
+          <Route path="requests" element={<Requests />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
