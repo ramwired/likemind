@@ -1,4 +1,26 @@
+import { useEffect } from "react";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch, useSelector } from "react-redux";
+import { addConnections } from "../utils/connectionSlice";
+
 const ConnectionsPage = () => {
+  const dispatch = useDispatch();
+  const connections = useSelector((state) => state.connections.connections);
+
+  useEffect(() => {
+    const fetchConnections = async () => {
+      try {
+        const res = await axios.get(BASE_URL + "/user/connections", {
+          withCredentials: true,
+        });
+        dispatch(addConnections(res.data));
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+    if (!connections) fetchConnections();
+  }, [dispatch, connections]);
   return (
     // FULL-BLEED WRAPPER: Holds the background and the absolute-positioned orbs
     <div className="relative h-[calc(100vh-80px)] w-full bg-slate-50 overflow-hidden">
@@ -34,7 +56,7 @@ const ConnectionsPage = () => {
 
               <div className="flex gap-2 items-center">
                 <span className="bg-white/50 border border-[#3e000c]/20 text-[#3e000c]/60 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                  248 Total
+                  {connections?.length || 0} Total
                 </span>
                 <span className="bg-[#ffcbdd]/40 border border-[#3e000c] text-[#3e000c] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-sm">
                   2 Unread
@@ -66,52 +88,37 @@ const ConnectionsPage = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-white/60 border border-[#3e000c] cursor-pointer transition-all shadow-sm">
-              <div className="relative">
-                <img
-                  className="w-12 h-12 rounded-full object-cover border border-[#3e000c]"
-                  src="https://i.pravatar.cc/150?img=32"
-                  alt="Jane Doe"
-                />
-                <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#fb4b4e] rounded-full border border-[#3e000c]"></div>
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <div className="flex justify-between items-center mb-0.5">
-                  <h3 className="font-medium tracking-tight text-[#3e000c] truncate text-sm">
-                    Jane Doe
-                  </h3>
-                  <span className="text-[10px] text-[#3e000c]/60 font-bold uppercase tracking-wider">
-                    1m
-                  </span>
+            {connections?.map((user, i) => (
+              <div
+                className="flex items-center gap-3 p-3 rounded-2xl bg-white/60 border border-[#3e000c] cursor-pointer transition-all shadow-sm"
+                key={i}
+              >
+                <div className="relative">
+                  <img
+                    className="w-12 h-12 rounded-full object-cover border border-[#3e000c]"
+                    src={
+                      user.profile ||
+                      "https://i.pinimg.com/236x/47/29/8f/47298fa216d3b8589663aaabbd0fef80.jpg"
+                    }
+                    alt="avatar"
+                  />
+                  <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#fb4b4e] rounded-full border border-[#3e000c]"></div>
                 </div>
-                <p className="text-xs text-[#3e000c]/70 truncate font-medium">
-                  Sent an attachment
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 p-3 rounded-2xl hover:bg-white/40 border border-transparent hover:border-[#3e000c]/20 cursor-pointer transition-all">
-              <div className="relative">
-                <img
-                  className="w-12 h-12 rounded-full object-cover border border-[#3e000c]/50"
-                  src="https://i.pravatar.cc/150?img=11"
-                  alt="John Smith"
-                />
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <div className="flex justify-between items-center mb-0.5">
-                  <h3 className="font-medium tracking-tight text-[#3e000c] truncate text-sm">
-                    John Smith
-                  </h3>
-                  <span className="text-[10px] text-[#3e000c]/40 font-bold uppercase tracking-wider">
-                    2h
-                  </span>
+                <div className="flex-1 overflow-hidden">
+                  <div className="flex justify-between items-center mb-0.5">
+                    <h3 className="font-medium tracking-tight text-[#3e000c] truncate text-sm">
+                      {user.firstName} {user.lastName}
+                    </h3>
+                    <span className="text-[10px] text-[#3e000c]/60 font-bold uppercase tracking-wider">
+                      1m
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#3e000c]/70 truncate font-medium">
+                    Sent an attachment
+                  </p>
                 </div>
-                <p className="text-xs text-[#3e000c]/60 truncate">
-                  Full Stack Developer
-                </p>
               </div>
-            </div>
+            ))}
           </div>
         </div>
 

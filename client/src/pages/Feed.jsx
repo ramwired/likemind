@@ -234,7 +234,7 @@ const Feed = () => {
                           <h2 className="text-4xl font-black text-white leading-none tracking-tight shadow-sm">
                             {user.firstName}
                           </h2>
-                          <span className="text-xl font-bold text-[#ffcbdd]">
+                          <span className="text-xl font-bold text-white">
                             {user.age} yrs
                           </span>
                         </div>
@@ -300,7 +300,7 @@ const Feed = () => {
                   {/* TILE 3: BIO */}
                   <div className="md:col-span-1 bg-[#fff5f7] rounded-3xl border-4 border-[#3e000c] shadow-[6px_6px_0_#3e000c] p-6">
                     <h3 className="text-xs font-black uppercase tracking-widest text-[#3e000c] mb-3 border-b-2 border-[#3e000c]/20 pb-2">
-                      The Bio
+                      About Me //
                     </h3>
                     <p className="text-[#3e000c] text-sm font-semibold leading-relaxed">
                       {user.about}
@@ -310,7 +310,7 @@ const Feed = () => {
                   {/* TILE 4: SKILLS & STACK */}
                   <div className="md:col-span-1 bg-white rounded-3xl border-4 border-[#3e000c] shadow-[6px_6px_0_#3e000c] p-6">
                     <h3 className="text-xs font-black uppercase tracking-widest text-[#3e000c] mb-3 border-b-2 border-[#3e000c]/20 pb-2">
-                      Stack
+                      Skills & Interests
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {user.skills.map((skill, index) => (

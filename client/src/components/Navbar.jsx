@@ -1,11 +1,17 @@
+import axios from "axios";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
+import { logout } from "../utils/userSlice";
+import { removeConnections } from "../utils/connectionSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const userData = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -21,19 +27,31 @@ const Navbar = () => {
     navigate(path);
     setIsProfileOpen(false);
   };
+  const handleLogout = async() => {
+    try {
+     await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+      dispatch(logout());
+      dispatch(removeConnections());
+      navigate("/login");
+    } catch (err) {
+      console.error(err.message);
+      dispatch(logout());
+      dispatch(removeConnections());
+      navigate("/login");
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-xl border-b border-[#ffcbdd]/60 shadow-[0_1px_3px_rgba(255,203,221,0.2)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
-          {/* Left: Brand/Logo with Red String of Fate Effect */}
-          <div
+          {/* Left: Brand/Logo */}
+          <Link
+            to="/feed"
             className="shrink-0 flex items-center cursor-pointer group relative"
-            onClick={() => navigate("/")}
           >
-            {/* Infinity Knot */}
             <svg
-              className="w-14 h-14 -mr-2 origin-center group-hover:scale-105 transition-transform duration-500 ease-out relative z-20"
+              className="w-14 h-14 -mr-2 origin-center group-hover:scale-105 group-hover:rotate-3 transition-all duration-500 ease-out relative z-20"
               viewBox="0 0 40 40"
               fill="none"
               stroke="currentColor"
@@ -44,7 +62,7 @@ const Navbar = () => {
             >
               <defs>
                 <filter
-                  id="string-glow"
+                  id="string-glow-landing"
                   x="-25%"
                   y="-25%"
                   width="150%"
@@ -54,15 +72,13 @@ const Navbar = () => {
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
               </defs>
-              {/* Soft glow */}
               <path
                 d="M12 20 C 4 12, 4 28, 12 20 C 20 12, 28 12, 28 20 C 28 28, 20 28, 12 20 Z"
                 stroke="#fb4b4e"
                 strokeWidth="2.4"
                 strokeOpacity="0.22"
-                filter="url(#string-glow)"
+                filter="url(#string-glow-landing)"
               />
-              {/* Core knot */}
               <path
                 d="M12 20 C 4 12, 4 28, 12 20 C 20 12, 28 12, 28 20 C 28 28, 20 28, 12 20"
                 stroke="#d10000"
@@ -70,12 +86,10 @@ const Navbar = () => {
                 className="group-hover:stroke-[#fb4b4e] transition-colors duration-300"
               />
             </svg>
-
-            {/* Brand Text */}
             <span className="text-2xl font-black tracking-tighter text-[#3e000c] relative z-10">
               LikeMind
             </span>
-          </div>
+          </Link>
 
           {/* Center: Navigation Links */}
           <div className="hidden md:flex items-center space-x-1">
@@ -169,7 +183,10 @@ const Navbar = () => {
                   }`}
                 >
                   <img
-                    src="https://i.pinimg.com/236x/47/29/8f/47298fa216d3b8589663aaabbd0fef80.jpg"
+                    src={
+                      userData?.profile ||
+                      "https://i.pinimg.com/236x/47/29/8f/47298fa216d3b8589663aaabbd0fef80.jpg"
+                    }
                     alt="Profile"
                     className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white"
                   />
@@ -181,10 +198,10 @@ const Navbar = () => {
                 <div className="absolute right-0 mt-3 w-48 bg-white/95 backdrop-blur-xl border border-[#ffcbdd]/60 rounded-2xl shadow-lg py-2 z-50 transform opacity-100 scale-100 transition-all origin-top-right">
                   <div className="px-4 py-2 border-b border-[#ffcbdd]/40 mb-1">
                     <p className="text-sm font-semibold text-[#3e000c]">
-                      Jane Doe
+                      {userData?.firstName} {userData?.lastName}
                     </p>
                     <p className="text-xs text-[#7c0b2b]/70">
-                      jane@likemind.com
+                      {userData?.emailId}
                     </p>
                   </div>
 
@@ -205,7 +222,7 @@ const Navbar = () => {
                   <div className="h-px bg-[#ffcbdd]/40 my-1"></div>
 
                   <button
-                    onClick={() => handleDropdownNavigation("/logout")}
+                    onClick={handleLogout}
                     className="w-full text-left px-4 py-2 text-sm font-semibold text-[#d10000] hover:bg-[#ffcbdd]/30 transition-colors"
                   >
                     Sign out

@@ -2,19 +2,21 @@ const express = require("express");
 const authRouter = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
+const { ageValidation } = require("../utils/validation");
 
 authRouter.post("/signup", async (req, res) => {
   try {
-    const { firstName, lastName, emailId, password, skills, about, gender } =
-      req.body;
+    const { firstName, lastName, emailId, password, dob, gender } = req.body;
+    if (!ageValidation(dob)) {
+      return res.status(401).send("Age must be above 18");
+    }
     const passwordhash = await bcrypt.hash(password, 10);
     const user = new User({
       firstName: firstName,
       lastName: lastName,
       emailId: emailId,
       password: passwordhash,
-      skills: skills,
-      about: about,
+      dob: dob,
       gender: gender,
     });
     await user.save();
@@ -28,17 +30,17 @@ authRouter.post("/login", async (req, res) => {
     const { emailId, password } = req.body;
     const validUser = await User.findOne({ emailId: emailId });
     if (!validUser) {
-      throw new Error("Invalid credentials");
+      return res.status(401).send("Invalid credentials");
     }
     const isValidPassword = await validUser.validatePassword(password);
     if (!isValidPassword) {
-      throw new Error("Invalid credentials");
+      return res.status(401).send("Invalid credentials");
     }
     const token = validUser.getJWT();
     res.cookie("token", token, { httpOnly: true });
-    res.json(validUser);
+    res.send("Login successfull!");
   } catch (err) {
-    res.status(401).send(err.message);
+    res.status(500).send(err.message);
   }
 });
 authRouter.post("/logout", (req, res) => {

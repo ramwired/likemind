@@ -1,6 +1,14 @@
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { logout } from "../utils/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { removeConnections } from "../utils/connectionSlice";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.user);
   const user = {
     firstName: "Bukayo",
     lastName: "Saka",
@@ -39,7 +47,20 @@ const Profile = () => {
       "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=400&auto=format&fit=crop",
     ],
   };
-  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(BASE_URL + "/logout", {}, { withCredentials: true });
+      dispatch(logout());
+      dispatch(removeConnections());
+      navigate("/login");
+    } catch (err) {
+      console.error(err.message);
+      dispatch(logout());
+      dispatch(removeConnections());
+      navigate("/login");
+    }
+  };
   return (
     <div className="min-h-screen relative py-8 px-4 sm:px-8 font-sans text-[#3e000c] selection:bg-[#ffcbdd] selection:text-[#3e000c] flex justify-center items-start overflow-hidden bg-[#fdfafb]">
       {/* === INNOVATIVE BACKGROUND === */}
@@ -110,7 +131,10 @@ const Profile = () => {
               <div className="w-full h-[1px] bg-[#3e000c]/20 my-[18px]"></div>
 
               {/* Danger Action Button */}
-              <button className="w-full flex items-center gap-3 px-[18px] py-2.5 text-sm font-bold text-[#3e000c]/50 hover:text-[#fb4b4e] hover:bg-[#fff5f7] rounded-xl transition-colors">
+              <button
+                className="w-full flex items-center gap-3 px-[18px] py-2.5 text-sm font-bold text-[#3e000c]/50 hover:text-[#fb4b4e] hover:bg-[#fff5f7] rounded-xl transition-colors"
+                onClick={handleLogout}
+              >
                 <svg
                   className="w-4 h-4"
                   fill="none"
@@ -217,16 +241,19 @@ const Profile = () => {
                 <div className="flex items-center gap-4 mb-5">
                   <div className="w-20 h-20 rounded-full border-2 border-white overflow-hidden bg-white shrink-0 shadow-lg">
                     <img
-                      src={user.profile}
+                      src={
+                        userData?.profile ||
+                        "https://i.pinimg.com/236x/47/29/8f/47298fa216d3b8589663aaabbd0fef80.jpg"
+                      }
                       alt={user.firstName}
                       className="w-full h-full object-cover"
                     />
                   </div>
                   <div>
                     <h2 className="text-4xl font-medium text-white tracking-tighter leading-none mb-1">
-                      {user.firstName}
+                      {userData?.firstName}
                     </h2>
-                    <span className="text-sm font-bold tracking-widest uppercase text-[#ffcbdd]">
+                    <span className="text-sm font-bold tracking-widest uppercase text-white">
                       {user.age} yrs • {user.location.split(",")[0]}
                     </span>
                   </div>
@@ -259,7 +286,7 @@ const Profile = () => {
               </div>
 
               <div className="flex flex-wrap gap-2 mt-auto">
-                {user.skills.map((skill, i) => (
+                {userData?.skills.map((skill, i) => (
                   <span
                     key={i}
                     className="px-3 py-1.5 bg-[#ffcbdd]/30 border border-[#3e000c] rounded-full text-xs font-semibold text-[#3e000c] hover:bg-[#3e000c] hover:text-[#ffcbdd] transition-all duration-300 cursor-default"
