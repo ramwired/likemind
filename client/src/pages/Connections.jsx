@@ -88,10 +88,10 @@ const ConnectionsPage = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-2">
-            {connections?.map((user, i) => (
+            {connections?.map((user) => (
               <div
                 className="flex items-center gap-3 p-3 rounded-2xl bg-white/60 border border-[#3e000c] cursor-pointer transition-all shadow-sm"
-                key={i}
+                key={user._id}
               >
                 <div className="relative">
                   <img

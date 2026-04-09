@@ -1,5 +1,12 @@
 const isEditDataValidated = (data) => {
-  const allowedFields = ["firstName", "lastName", "profile", "about", "skills"];
+  const allowedFields = [
+    "firstName",
+    "lastName",
+    "profile",
+    "about",
+    "skills",
+    "dob",
+  ];
   return Object.keys(data).every((field) => allowedFields.includes(field));
 };
 const isChangePasswordData = (data) => {

@@ -116,12 +116,12 @@ const userSchema = mongoose.Schema(
     prompt: {
       question: {
         type: String,
-        maxLength: 80,
+        maxLength: 40,
         trim: true,
       },
       answer: {
         type: String,
-        maxLength: 180,
+        maxLength: 100,
         trim: true,
       },
     },

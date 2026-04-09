@@ -22,7 +22,7 @@ const Profile = () => {
     coverPhoto:
       "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=400&auto=format&fit=crop",
     about:
-      "Passionate about building scalable backends and creating rich UIs with JSX and Tailwind CSS. When I'm off the keyboard, you can usually find me behind a lens, exploring cinematic software and directing short films to bring stories to life.",
+      "I’m someone who values growth, consistency, and learning at a deep level. I enjoy building things, solving problems, and improving systems step by step. I focus on discipline and clarity while staying curious about new ideas. I believe progress comes from small, consistent actions, and I’m always working toward becoming more skilled, thoughtful, and effective in everything I do.",
     skills: ["React", "Node.js", "Express", "MongoDB", "Tailwind", "Figma"],
     vibe: {
       lookingFor: "Open source collaborators 🤝",
@@ -31,9 +31,9 @@ const Profile = () => {
     },
     prompts: [
       {
-        question: "My most irrational fear...",
+        question: "You handle challenges with quiet confidence",
         answer:
-          "Accidentally pushing an infinite loop to production on a Friday afternoon.",
+          "Focus daily, learn constantly, and act with intent; small steps build lasting success over time now.",
       },
     ],
     photos: [
@@ -298,38 +298,40 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Free Flowing Prompt & Bio (Visually Lifted) */}
-          <div className="lg:col-span-5 relative flex flex-col justify-center py-4 px-6 sm:px-12 h-full overflow-hidden">
-            {/* Added pb-16 here to shift the vertical center point upwards! */}
-            <div className="flex flex-col justify-center flex-1 relative z-10 w-full h-full pb-16">
-              {/* Floating Tag */}
-              <div className="mb-1 shrink-0">
-                <span className="inline-block px-4 py-1.5 rounded-full border border-[#3e000c] bg-[#ffcbdd]/40 text-[#3e000c] text-[10px] font-black uppercase tracking-widest transform -rotate-2">
-                  Featured Prompt ✨
-                </span>
+          {/* RIGHT COLUMN: Free Flowing Prompt & Bio (Maximized Space) */}
+          <div className="lg:col-span-5 relative flex flex-col h-full overflow-hidden">
+            <div className="flex flex-col flex-1 relative z-10 w-full h-full pt-6 pb-0 px-6 sm:px-12 gap-8">
+              {/* TOP SECTION: Prompt */}
+              {/* THE FIX: Locked height to exactly 280px (or 320px on desktop) so it NEVER stretches the grid. */}
+              <div className="flex flex-col shrink-0 h-[280px] lg:h-[320px]">
+                <div className="mb-2 shrink-0">
+                  <span className="inline-block px-4 py-1.5 rounded-full border border-[#3e000c] bg-[#ffcbdd]/40 text-[#3e000c] text-[10px] font-black uppercase tracking-widest transform -rotate-2">
+                    Featured Prompt ✨
+                  </span>
+                </div>
+
+                {/* Added line-clamp-3 as a failsafe for the 40-character limit */}
+                <h2 className="text-4xl lg:text-[2.60rem] font-serif tracking-tighter text-[#3e000c] leading-[1.05] mb-1 pb-1 shrink-0 line-clamp-3">
+                  {user.prompts[0].question.replace("...", "")}
+                  <span className="text-[#fb4b4e]">...</span>
+                </h2>
+
+                <div className="flex gap-4 items-start shrink-0 mt-2">
+                  <span className="text-6xl text-[#ffcbdd] font-serif leading-none pt-2 opacity-80 shrink-0">
+                    "
+                  </span>
+                  {/* Added line-clamp-4 as a failsafe for the 100-character limit */}
+                  <p className="w-full text-2xl sm:text-[1.75rem] text-[#3e000c] font-serif italic leading-tight mt-2 p-2 -ml-2 bg-transparent line-clamp-4">
+                    {user.prompts[0].answer}
+                  </p>
+                </div>
               </div>
 
-              {/* Question */}
-              <h2 className="text-4xl lg:text-5xl font-medium tracking-tighter text-[#3e000c] leading-[1.05] mb-1 pb-1 shrink-0">
-                {user.prompts[0].question.replace("...", "")}
-                <span className="text-[#fb4b4e]">...</span>
-              </h2>
-
-              {/* Answer */}
-              <div className="flex gap-4 items-start mb-2 shrink-0">
-                <span className="text-6xl text-[#ffcbdd] font-serif leading-none pt-2 opacity-80 shrink-0">
-                  "
-                </span>
-                <p className="w-full text-2xl sm:text-[1.75rem] text-[#3e000c] font-serif italic leading-tight mt-2 p-2 -ml-2">
-                  {user.prompts[0].answer}
-                </p>
-              </div>
-
-              {/* Bio Section */}
-              <div className="mt-16 pt-0 pb-2 shrink-0">
-                {/* Decorative SVG */}
+              {/* BOTTOM SECTION: About Me */}
+              {/* THE FIX: Replaced the massive mt-16 with mt-2. The locked height of the section above now provides all the necessary spacing automatically! */}
+              <div className="flex flex-col flex-1 min-h-0 mt-2">
                 <svg
-                  className="w-16 h-3 mb-2 text-[#fb4b4e] opacity-80"
+                  className="w-16 h-3 mb-2 text-[#fb4b4e] opacity-80 shrink-0"
                   viewBox="0 0 100 20"
                   fill="none"
                   stroke="currentColor"
@@ -339,11 +341,11 @@ const Profile = () => {
                   <path d="M0 10 L 30 10 M 40 10 L 100 10" />
                 </svg>
 
-                <div className="flex flex-col max-w-md">
-                  <span className="text-[#3e000c] font-bold block mb-1">
+                <div className="flex flex-col flex-1 min-h-0 max-w-md">
+                  <span className="text-[#3e000c] font-bold block mb-1 shrink-0">
                     About Me //
                   </span>
-                  <p className="text-base lg:text-lg font-medium text-[#3e000c]/80 leading-relaxed w-full p-2 -ml-2">
+                  <p className="text-base lg:text-lg font-medium text-[#3e000c]/80 leading-relaxed w-full p-2 -ml-2 pr-4 max-h-[220px] overflow-y-auto bg-transparent [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#3e000c]/20 hover:[&::-webkit-scrollbar-thumb]:bg-[#3e000c]/40 [&::-webkit-scrollbar-thumb]:rounded-full">
                     {user.about}
                   </p>
                 </div>

@@ -188,7 +188,18 @@ const Feed = () => {
       transition: { duration: 0.8, ease: "easeInOut" },
     }),
   };
-
+  const truncateAboutMe = (about) => {
+    const MAX_LENGTH = 134;
+    const truncatedValue = about.slice(0, MAX_LENGTH);
+    if (about.length > MAX_LENGTH) {
+      const last = truncatedValue.lastIndexOf(" ");
+      if (last === -1) {
+        return truncatedValue + "...";
+      }
+      return truncatedValue.slice(0, last) + "...";
+    }
+    return about;
+  };
   return (
     <div className="min-h-screen font-sans py-12 px-4 sm:px-8 bg-[#fdfafb] relative overflow-hidden">
       {/* Background Graphic */}
@@ -303,7 +314,7 @@ const Feed = () => {
                       About Me //
                     </h3>
                     <p className="text-[#3e000c] text-sm font-semibold leading-relaxed">
-                      {user.about}
+                      {truncateAboutMe(user.about)}
                     </p>
                   </div>
 
