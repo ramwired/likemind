@@ -72,20 +72,20 @@ const userSchema = mongoose.Schema(
     },
     about: {
       type: String,
-      maxLength: 400,
+      maxLength: 500,
       trim: true,
     },
     skills: {
       type: [
         {
           type: String,
-          maxLength: 20,
+          maxLength: 50,
           trim: true,
         },
       ],
       validate: [
-        (val) => val.length >= 6 && val.length <= 12,
-        "You must select between 6 and 12 skills.",
+        (val) => val.length >= 6 && val.length <= 50,
+        "You must select between 6 and 50 skills.",
       ],
     },
     vibe: {

@@ -4,11 +4,13 @@ import { BASE_URL } from "../utils/constants";
 import { logout } from "../utils/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { removeConnections } from "../utils/connectionSlice";
+import { useState } from "react";
 
 const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.user);
+  const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
   const user = {
     firstName: "Bukayo",
     lastName: "Saka",
@@ -264,32 +266,59 @@ const Profile = () => {
               </div>
             </div>
 
-            {/* Box 4: Skills & Interests Bento */}
-            <div className="bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-6 flex flex-col shrink-0">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-medium tracking-tight text-[#3e000c]">
-                  Skills & Interests
-                </h3>
-                <svg
-                  className="w-6 h-6 text-[#3e000c] opacity-40"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                  />
-                </svg>
+            {/* Box 4: Skills & Interests Bento (Vertical Stack Strategy) */}
+            <div
+              onClick={() => setIsSkillsExpanded(true)}
+              className="bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-6 flex flex-col shrink-0 h-[183px] cursor-pointer group hover:bg-[#fff5f7] hover:shadow-[4px_4px_0_#3e000c] transition-all duration-300 relative"
+            >
+              {/* THE FIX: Changed to items-start and added a container to stack title/subtitle */}
+              <div className="flex justify-between items-start mb-5 shrink-0">
+                <div className="flex items-center gap-3">
+                  {/* Your adament bracket size - perfectly centered with the first line of text */}
+                  <div className="flex items-center font-mono text-[#fb4b4e] shrink-0">
+                    <span className="text-[28px] opacity-40 font-light leading-none -translate-y-[2px]">
+                      {"{"}
+                    </span>
+                    <span className="font-black text-lg mx-1.5 leading-none">
+                      {(userData?.skills || user.skills).length}
+                    </span>
+                    <span className="text-[28px] opacity-40 font-light leading-none -translate-y-[2px]">
+                      {"}"}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-2xl font-medium tracking-tight text-[#3e000c] group-hover:text-[#fb4b4e] transition-colors leading-none">
+                      Skills & Interests
+                    </h3>
+
+                    {/* THE FIX: Sentence moved here to avoid horizontal "messiness" */}
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#3e000c]/40 group-hover:text-[#fb4b4e] transition-colors flex items-center gap-1">
+                      Click to view all
+                      <svg
+                        className="w-3 h-3 transform group-hover:translate-x-0.5 transition-transform"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="3"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              <div className="flex flex-wrap gap-2 mt-auto">
-                {userData?.skills.map((skill, i) => (
+              {/* Exact locked body code (Hard crop, renders all) */}
+              <div className="flex flex-wrap content-start gap-2 w-full flex-1 overflow-hidden pointer-events-none">
+                {(userData?.skills || user.skills).map((skill, i) => (
                   <span
                     key={i}
-                    className="px-3 py-1.5 bg-[#ffcbdd]/30 border border-[#3e000c] rounded-full text-xs font-semibold text-[#3e000c] hover:bg-[#3e000c] hover:text-[#ffcbdd] transition-all duration-300 cursor-default"
+                    className="px-3 py-1.5 bg-[#ffcbdd]/30 border border-[#3e000c]/50 rounded-full text-xs font-semibold text-[#3e000c] whitespace-nowrap mb-0.5"
                   >
                     {skill}
                   </span>
@@ -378,6 +407,77 @@ const Profile = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* === SPATIAL MORPH MODAL (Expanded Skills Panel) === */}
+      <div
+        className={`fixed inset-0 z-[100] flex items-center justify-center p-4 ${
+          isSkillsExpanded ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        <div
+          className={`absolute inset-0 transition-all duration-500 ease-in-out ${
+            isSkillsExpanded
+              ? "bg-[#3e000c]/30 backdrop-blur-md"
+              : "bg-transparent backdrop-blur-none"
+          }`}
+          onClick={() => setIsSkillsExpanded(false)}
+        ></div>
+
+        <div
+          className={`relative w-fit min-w-[320px] sm:min-w-[400px] max-w-3xl bg-white border-2 border-[#3e000c] rounded-[2rem] p-6 sm:p-8 shadow-[0_20px_60px_-15px_rgba(62,0,12,0.4)] transform-gpu transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+            isSkillsExpanded
+              ? "opacity-100 scale-100 translate-y-0"
+              : "opacity-0 scale-95 translate-y-12"
+          }`}
+        >
+          {/* Header */}
+          <div className="flex justify-between items-center mb-6 border-b-2 border-dashed border-[#3e000c]/20 pb-4">
+            <div>
+              <h2 className="text-3xl sm:text-4xl font-medium tracking-tighter text-[#3e000c]">
+                Skills Canvas
+              </h2>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="w-1.5 h-1.5 rounded-full bg-[#fb4b4e] animate-pulse"></div>
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#3e000c]/50">
+                  {(userData?.skills || user.skills).length} Confirmed Interests
+                </p>
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setIsSkillsExpanded(false)}
+              className="w-12 h-12 bg-[#ffcbdd]/40 hover:bg-[#fb4b4e] text-[#3e000c] hover:text-white rounded-full flex items-center justify-center border border-[#3e000c] transition-all duration-300 shadow-[2px_2px_0_#3e000c] hover:shadow-[4px_4px_0_#3e000c] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Full List of Skills */}
+          <div className="flex flex-wrap gap-2.5 max-h-[60vh] overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#3e000c]/20 hover:[&::-webkit-scrollbar-thumb]:bg-[#3e000c]/40 [&::-webkit-scrollbar-thumb]:rounded-full">
+            {(userData?.skills || user.skills).map((skill, i) => (
+              <span
+                key={i}
+                className="px-4 py-2 bg-[#f8e9ed] border border-[#3e000c] rounded-full text-sm font-semibold text-[#3e000c] hover:bg-[#3e000c] hover:text-[#ffcbdd] transition-all duration-300 cursor-default shadow-sm"
+              >
+                {skill}
+              </span>
+            ))}
           </div>
         </div>
       </div>

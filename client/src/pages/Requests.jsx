@@ -15,7 +15,7 @@ const Requests = () => {
       coverPhoto:
         "https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=600&auto=format&fit=crop",
       about:
-        "Optimizing database queries and building microservices. Looking for frontend collaborators to bring some of my API ideas to life with a great UI/UX.",
+        "I’m someone who values growth, consistency, and learning at a deep level. I enjoy building things, solving problems, and improving systems step by step. I focus on discipline and clarity while staying curious about new ideas. I believe progress comes from small, consistent actions, and I’m always working toward becoming more skilled, thoughtful, and effective in everything I do.",
       skills: ["Rust", "Go", "PostgreSQL", "Docker", "AWS", "Redis", "gRPC"],
       vibe: {
         lookingFor: "Frontend wizards 🪄",
@@ -24,9 +24,9 @@ const Requests = () => {
       },
       prompts: [
         {
-          question: "My most irrational fear...",
+          question: "You handle challenges with quiet confidence...",
           answer:
-            "Losing SSH access to a production server during a live demo.",
+            "Focus daily, learn constantly, and act with intent; small steps build lasting success over time now",
         },
       ],
       photos: [
@@ -55,7 +55,7 @@ const Requests = () => {
       coverPhoto:
         "https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=600&auto=format&fit=crop",
       about:
-        "Obsessed with creating intuitive software for film directors and storytellers. Let's build something cinematic together.",
+        "I’m someone who values growth, consistency, and learning at a deep level. I enjoy building things, solving problems, and improving systems step by step. I focus on discipline and clarity while staying curious about new ideas. I believe progress comes from small, consistent actions, and I’m always working toward becoming more skilled, thoughtful, and effective in everything I do.",
       skills: [
         "Figma",
         "Framer",
@@ -72,9 +72,9 @@ const Requests = () => {
       },
       prompts: [
         {
-          question: "Two truths and a lie...",
+          question: "You handle challenges with quiet confidence...",
           answer:
-            "I use light mode. I own 14 mechanical keyboards. I actually understand CSS Grid.",
+            "Focus daily, learn constantly, and act with intent; small steps build lasting success over time now",
         },
       ],
       photos: [
@@ -531,33 +531,40 @@ const Requests = () => {
                 </div>
               </div>
 
-              {/* RIGHT COLUMN: Free Flowing Prompt & Bio (Text Heights Locked) */}
-              <div className="lg:col-span-5 relative flex flex-col justify-center py-4 px-6 sm:px-12 h-full overflow-hidden">
-                <div className="flex flex-col justify-center flex-1 relative z-10 w-full h-full pb-16">
-                  <div className="mb-1 shrink-0">
-                    <span className="inline-block px-4 py-1.5 rounded-full border border-[#3e000c] bg-[#ffcbdd]/40 text-[#3e000c] text-[10px] font-black uppercase tracking-widest transform -rotate-2">
-                      Featured Prompt ✨
-                    </span>
+              {/* RIGHT COLUMN: Free Flowing Prompt & Bio (Maximized Space) */}
+              <div className="lg:col-span-5 relative flex flex-col h-full overflow-hidden">
+                <div className="flex flex-col flex-1 relative z-10 w-full h-full pt-6 pb-0 px-6 sm:px-12 gap-8">
+                  {/* TOP SECTION: Prompt */}
+                  {/* THE FIX: Locked height to exactly 280px (or 320px on desktop) so it NEVER stretches the grid. */}
+                  <div className="flex flex-col shrink-0 h-[280px] lg:h-[320px]">
+                    <div className="mb-2 shrink-0">
+                      <span className="inline-block px-4 py-1.5 rounded-full border border-[#3e000c] bg-[#ffcbdd]/40 text-[#3e000c] text-[10px] font-black uppercase tracking-widest transform -rotate-2">
+                        Featured Prompt ✨
+                      </span>
+                    </div>
+
+                    {/* Added line-clamp-3 as a failsafe for the 40-character limit */}
+                    <h2 className="text-4xl lg:text-[2.60rem] font-serif tracking-tighter text-[#3e000c] leading-[1.05] mb-1 pb-1 shrink-0 line-clamp-3">
+                      {selectedUser.prompts[0].question.replace("...", "")}
+                      <span className="text-[#fb4b4e]">...</span>
+                    </h2>
+
+                    <div className="flex gap-4 items-start shrink-0 mt-2">
+                      <span className="text-6xl text-[#ffcbdd] font-serif leading-none pt-2 opacity-80 shrink-0">
+                        "
+                      </span>
+                      {/* Added line-clamp-4 as a failsafe for the 100-character limit */}
+                      <p className="w-full text-2xl sm:text-[1.75rem] text-[#3e000c] font-serif italic leading-tight mt-2 p-2 -ml-2 bg-transparent line-clamp-4">
+                        {selectedUser.prompts[0].answer}
+                      </p>
+                    </div>
                   </div>
 
-                  <h2 className="text-4xl lg:text-5xl font-medium tracking-tighter text-[#3e000c] leading-[1.05] mb-1 pb-1 shrink-0">
-                    {selectedUser.prompts[0].question.replace("...", "")}
-                    <span className="text-[#fb4b4e]">...</span>
-                  </h2>
-
-                  <div className="flex gap-4 items-start mb-2 shrink-0">
-                    <span className="text-6xl text-[#ffcbdd] font-serif leading-none pt-2 opacity-80 shrink-0">
-                      "
-                    </span>
-                    {/* ADDED min-h-[96px] to lock prompt height */}
-                    <p className="w-full text-2xl sm:text-[1.75rem] text-[#3e000c] font-serif italic leading-tight mt-2 p-2 -ml-2 min-h-[96px]">
-                      {selectedUser.prompts[0].answer}
-                    </p>
-                  </div>
-
-                  <div className="mt-16 pt-0 pb-2 shrink-0">
+                  {/* BOTTOM SECTION: About Me */}
+                  {/* THE FIX: Replaced the massive mt-16 with mt-2. The locked height of the section above now provides all the necessary spacing automatically! */}
+                  <div className="flex flex-col flex-1 min-h-0 mt-2">
                     <svg
-                      className="w-16 h-3 mb-2 text-[#fb4b4e] opacity-80"
+                      className="w-16 h-3 mb-2 text-[#fb4b4e] opacity-80 shrink-0"
                       viewBox="0 0 100 20"
                       fill="none"
                       stroke="currentColor"
@@ -566,12 +573,12 @@ const Requests = () => {
                     >
                       <path d="M0 10 L 30 10 M 40 10 L 100 10" />
                     </svg>
-                    <div className="flex flex-col max-w-md">
-                      <span className="text-[#3e000c] font-bold block mb-1">
+
+                    <div className="flex flex-col flex-1 min-h-0 max-w-md">
+                      <span className="text-[#3e000c] font-bold block mb-1 shrink-0">
                         About Me //
                       </span>
-                      {/* ADDED min-h-[160px] to lock bio height */}
-                      <p className="text-base lg:text-lg font-medium text-[#3e000c]/80 leading-relaxed w-full p-2 -ml-2 min-h-[160px]">
+                      <p className="text-base lg:text-lg font-medium text-[#3e000c]/80 leading-relaxed w-full p-2 -ml-2 pr-4 max-h-[220px] overflow-y-auto bg-transparent [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-[#3e000c]/20 hover:[&::-webkit-scrollbar-thumb]:bg-[#3e000c]/40 [&::-webkit-scrollbar-thumb]:rounded-full">
                         {selectedUser.about}
                       </p>
                     </div>
