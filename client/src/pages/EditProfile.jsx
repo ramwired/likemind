@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 
 const EditProfile = () => {
   // --- Cinematic Focus Mode State ---
@@ -55,7 +55,7 @@ const EditProfile = () => {
     if (isCinematic) setIsFocusMode(false);
   };
 
-  // Skills State
+  // --- Skills State ---
   const [skills, setSkills] = useState([
     "Node.js",
     "JSX",
@@ -65,16 +65,50 @@ const EditProfile = () => {
     "Pre-production",
   ]);
   const [newSkill, setNewSkill] = useState("");
+  const [isSkillsExpanded, setIsSkillsExpanded] = useState(false);
+  const [skillError, setSkillError] = useState("");
+
+  // NEW: Real-time tracker that watches the skills array
+  useEffect(() => {
+    const remaining = 6 - skills.length;
+
+    if (remaining > 0) {
+      if (skills.length === 0) {
+        setSkillError(
+          "Every masterpiece starts somewhere. Add 6 skills to begin.",
+        );
+      } else if (remaining === 1) {
+        setSkillError(
+          "Almost there. Add 1 more skill to complete your canvas.",
+        );
+      } else {
+        setSkillError(
+          `Your canvas needs depth. Add ${remaining} more skills to save.`,
+        );
+      }
+    } else {
+      setSkillError(""); // Instantly clears the message when they hit 6
+    }
+  }, [skills.length]); // This tells React to run this logic every time the length changes
 
   const handleAddSkill = (e) => {
-    if (e.key === "Enter" && newSkill.trim() && skills.length < 12) {
+    if (e.key === "Enter" && newSkill.trim() && skills.length < 50) {
       setSkills([...skills, newSkill.trim()]);
       setNewSkill("");
+      // Notice we removed the manual error clearing here—useEffect handles it automatically now!
     }
   };
 
   const removeSkill = (skillToRemove) => {
     setSkills(skills.filter((skill) => skill !== skillToRemove));
+  };
+
+  const handleSaveSkills = () => {
+    // We only need to check if they are allowed to close now.
+    // If they have less than 6, the error is already visible, so the button just won't close the modal.
+    if (skills.length >= 6) {
+      setIsSkillsExpanded(false);
+    }
   };
 
   const handleEnhancePrompt = () => {
@@ -165,42 +199,68 @@ const EditProfile = () => {
           <div
             className={`lg:col-span-3 flex flex-col gap-5 transition-all duration-700 ease-in-out origin-top-left ${isFocusMode ? "opacity-30 blur-[3px] scale-[0.98] pointer-events-none grayscale-[30%]" : "opacity-100 scale-100 grayscale-0"}`}
           >
-            {/* Box 1: Compact Identity Block */}
-            <div className="bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-[22px] flex flex-col w-full shadow-sm">
-              <h3 className="text-xl font-medium tracking-tight text-[#3e000c] leading-none mb-5 mt-1.5">
-                Identity
-              </h3>
-              <div className="flex items-start gap-4 mb-4">
-                <div className="relative group/avatar cursor-pointer shrink-0 mt-1">
-                  <div className="w-16 h-16 rounded-full border border-[#3e000c]/20 overflow-hidden bg-white shadow-sm group-hover/avatar:border-[#fb4b4e] transition-colors">
-                    <img
-                      src={profilePhoto}
-                      alt="Avatar"
-                      className="w-full h-full object-cover group-hover/avatar:opacity-40 transition-opacity"
-                    />
+            {/* Box 1: Compact Identity Block*/}
+            <div className="bg-[#fff5f7] border border-[#3e000c] rounded-[2rem] flex flex-col w-full shadow-sm h-[276px] relative overflow-hidden transition-all hover:shadow-md group">
+              {/* Industrial "Warning Tape" Header */}
+              <div className="bg-[#fb4b4e] text-white px-5 py-2 flex justify-between items-center shrink-0 border-b border-[#3e000c]">
+                <span className="font-mono text-[9px] font-black tracking-[0.2em] uppercase">
+                  USR_ID // ACTIVE
+                </span>
+                <div className="w-1.5 h-1.5 bg-white rounded-none animate-ping"></div>
+              </div>
+
+              <div className="p-5 flex flex-col flex-1 h-full relative z-10">
+                {/* Top: Overlapping Avatar and Offset Name Blocks */}
+                <div className="flex items-start gap-4 mb-4 shrink-0">
+                  {/* Harsh Square Avatar */}
+                  <div className="relative group/avatar cursor-pointer shrink-0 z-20 mt-1">
+                    <div className="w-16 h-16 rounded-lg overflow-hidden border border-[#3e000c] bg-white shadow-[2px_2px_0_#3e000c] group-hover/avatar:shadow-[4px_4px_0_#fb4b4e] group-hover/avatar:-translate-y-1 transition-all duration-300 -rotate-3 group-hover/avatar:rotate-0">
+                      <img
+                        src={profilePhoto}
+                        alt="Avatar"
+                        className="w-full h-full object-cover grayscale group-hover/avatar:grayscale-0 transition-all duration-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* The True Overlap: Clashing Name Blocks */}
+                  <div className="flex-1 w-full min-w-0 flex flex-col">
+                    {/* Tilted First Name Block */}
+                    <div className="bg-[#3e000c] transform rotate-1 mb-[-8px] relative z-10 shadow-sm">
+                      <input
+                        name="firstName"
+                        maxLength={fieldLimits.firstName.max}
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        onFocus={() => handleFocus("firstName")}
+                        onBlur={() => handleBlur()}
+                        type="text"
+                        placeholder="First name"
+                        className="text-[15px] font-extrabold  text-white leading-none   focus:outline-none w-full px-1 py-3 text-center transition-colors"
+                      />
+                    </div>
+                    {/* Overlapping Last Name Block */}
+                    <div className="bg-[#ffcbdd] transform -rotate-1 relative z-20 shadow-md ">
+                      <input
+                        name="lastName"
+                        maxLength={fieldLimits.lastName.max}
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        onFocus={() => handleFocus("lastName")}
+                        onBlur={() => handleBlur()}
+                        type="text"
+                        placeholder="Last name"
+                        className="text-[15px] font-extrabold  text-[#3e000c] leading-none  focus:outline-none w-full px-1 py-2 text-center transition-color"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="flex-1 w-full min-w-0 flex flex-col gap-1">
-                  <input
-                    name="firstName"
-                    maxLength={fieldLimits.firstName.max}
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    onFocus={() => handleFocus("firstName")}
-                    onBlur={() => handleBlur()}
-                    type="text"
-                    className="text-lg font-medium text-[#3e000c] tracking-tight leading-none bg-transparent border-b border-dashed border-transparent focus:border-[#fb4b4e] focus:outline-none w-full px-1 -ml-1 truncate"
-                  />
-                  <input
-                    name="lastName"
-                    maxLength={fieldLimits.lastName.max}
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    onFocus={() => handleFocus("lastName")}
-                    onBlur={() => handleBlur()}
-                    type="text"
-                    className="text-lg font-medium text-[#3e000c] tracking-tight leading-none bg-transparent border-b border-dashed border-transparent focus:border-[#fb4b4e] focus:outline-none w-full px-1 -ml-1 truncate"
-                  />
+
+                {/* Middle: Technical Location Tag */}
+                <div className="flex w-full mb-3 shrink-0 bg-white shadow-sm overflow-hidden rounded-sm border border-[#3e000c]">
+                  <div className="bg-[#3e000c] text-white font-mono text-[10px] font-bold px-3 py-1.5 flex items-center justify-center shrink-0 uppercase tracking-widest border-r border-[#3e000c]">
+                    LOC
+                  </div>
                   <input
                     name="location"
                     maxLength={fieldLimits.location.max}
@@ -209,20 +269,21 @@ const EditProfile = () => {
                     onFocus={() => handleFocus("location")}
                     onBlur={() => handleBlur()}
                     type="text"
-                    className="text-[10px] font-bold tracking-widest uppercase text-[#3e000c]/50 bg-transparent border-b border-dashed border-transparent focus:border-[#fb4b4e] focus:outline-none w-full px-1 -ml-1 mt-1"
+                    className="text-[11px] font-black tracking-widest uppercase text-[#fb4b4e] bg-transparent border-b border-dashed border-transparent focus:outline-none w-full px-2 py-1.5 transition-colors"
                   />
                 </div>
+
+                {/* Bottom: Monospace Terminal Headline */}
+                <textarea
+                  name="headline"
+                  maxLength={fieldLimits.headline.max}
+                  value={formData.headline}
+                  onChange={handleInputChange}
+                  onFocus={() => handleFocus("headline")}
+                  onBlur={() => handleBlur()}
+                  className="text-[#3e000c] font-mono text-[11px] leading-relaxed w-full bg-white/50 border border-dashed border-transparent hover:border-[#3e000c]/40 focus:border-[#fb4b4e] focus:outline-none rounded-none p-3 resize-none flex-1 mt-auto text-left transition-colors"
+                />
               </div>
-              <textarea
-                name="headline"
-                maxLength={fieldLimits.headline.max}
-                value={formData.headline}
-                onChange={handleInputChange}
-                onFocus={() => handleFocus("headline")}
-                onBlur={() => handleBlur()}
-                rows="2"
-                className="text-[#3e000c] text-sm font-medium leading-relaxed w-full bg-[#fff5f7]/50 border border-dashed border-transparent focus:border-[#fb4b4e] focus:outline-none rounded-xl p-3 resize-none"
-              />
             </div>
 
             {/* Box 2: Vibe Ticket */}
@@ -259,7 +320,7 @@ const EditProfile = () => {
                     onFocus={() => handleFocus("lookingFor")}
                     onBlur={() => handleBlur()}
                     type="text"
-                    className="text-base font-medium text-[#3e000c] leading-tight bg-white/60 w-full px-2 py-1 -ml-2 rounded-md backdrop-blur-sm border border-dashed border-transparent focus:border-[#fb4b4e] focus:outline-none"
+                    className="text-base font-medium text-[#3e000c] leading-tight bg-white/60 w-full px-2 py-1 -ml-2 rounded-md backdrop-blur-sm border border-dashed border-transparent hover:border-[#3e000c]/30 focus:border-[#fb4b4e] focus:outline-none"
                   />
                 </div>
               </div>
@@ -292,7 +353,7 @@ const EditProfile = () => {
                       onFocus={() => handleFocus("listeningToTrack")}
                       onBlur={() => handleBlur()}
                       type="text"
-                      className="text-2xl sm:text-3xl font-medium tracking-tighter leading-none text-[#3e000c] truncate bg-transparent border-b border-dashed border-transparent focus:border-[#fb4b4e] focus:outline-none w-full pb-1"
+                      className="text-2xl sm:text-3xl font-medium tracking-tighter leading-none text-[#3e000c] truncate bg-transparent border-b border-dashed border-transparent hover:border-[#3e000c]/30 focus:border-[#fb4b4e] focus:outline-none w-full pb-1"
                     />
                     <input
                       name="listeningToArtist"
@@ -302,7 +363,7 @@ const EditProfile = () => {
                       onFocus={() => handleFocus("listeningToArtist")}
                       onBlur={() => handleBlur()}
                       type="text"
-                      className="text-xs font-bold text-[#3e000c]/60 truncate italic bg-transparent border-b border-dashed border-transparent focus:border-[#fb4b4e] focus:outline-none w-3/4 pb-1"
+                      className="text-xs font-bold text-[#3e000c]/60 truncate italic bg-transparent border-b border-dashed border-transparent hover:border-[#3e000c]/30 focus:border-[#fb4b4e] focus:outline-none w-3/4 pb-1"
                     />
                   </div>
                 </div>
@@ -328,58 +389,61 @@ const EditProfile = () => {
               </div>
             </div>
 
-            {/* Box 4: Skills Editable Bento */}
-            <div className="bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-6 flex flex-col shrink-0">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-medium tracking-tight text-[#3e000c]">
-                  Skills & Interests
-                </h3>
-                <span
-                  className={`text-[10px] uppercase font-bold tracking-wider ${skills.length >= 12 ? "text-[#fb4b4e]" : "text-[#3e000c]/50"}`}
-                >
-                  {skills.length}/50 Limit
-                </span>
-              </div>
-              <div className="flex flex-wrap items-start gap-2 mt-auto">
-                {skills.map((skill, i) => (
-                  <div
-                    key={i}
-                    className="group relative px-3 py-1.5 bg-[#ffcbdd]/30 border border-[#3e000c] rounded-full text-xs font-semibold text-[#3e000c] cursor-pointer hover:bg-[#fb4b4e] hover:text-white transition-all duration-300"
-                  >
-                    {skill}
-                    <div
-                      onClick={() => removeSkill(skill)}
-                      className="absolute -top-1 -right-1 bg-[#3e000c] text-white rounded-full p-0.5 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
-                    >
+            {/* Box 4: Skills & Interests Bento (Locked Preview Trigger) */}
+            <div
+              onClick={() => setIsSkillsExpanded(true)}
+              className="bg-white/95 backdrop-blur-sm border border-[#3e000c] rounded-[2rem] p-6 flex flex-col shrink-0 h-[192px] cursor-pointer group hover:bg-[#fff5f7] hover:shadow-[4px_4px_0_#3e000c] transition-all duration-300 relative"
+            >
+              <div className="flex justify-between items-start mb-5 shrink-0">
+                <div className="flex items-center gap-3">
+                  {/* Centered Syntax Bracket */}
+                  <div className="flex items-center font-mono text-[#fb4b4e] shrink-0">
+                    <span className="text-[28px] opacity-40 font-light leading-none -translate-y-[2px]">
+                      {"{"}
+                    </span>
+                    <span className="font-black text-lg mx-1.5 leading-none">
+                      {skills.length}
+                    </span>
+                    <span className="text-[28px] opacity-40 font-light leading-none -translate-y-[2px]">
+                      {"}"}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-2xl font-medium tracking-tight text-[#3e000c] group-hover:text-[#fb4b4e] transition-colors leading-none">
+                      Skills & Interests
+                    </h3>
+                    {/* Subtitle Action */}
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#3e000c]/40 group-hover:text-[#fb4b4e] transition-colors flex items-center gap-1">
+                      Click to edit all
                       <svg
-                        className="w-3 h-3"
+                        className="w-3 h-3 transform group-hover:translate-x-0.5 transition-transform"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
+                        strokeWidth="3"
                       >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
+                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
                         />
                       </svg>
-                    </div>
+                    </span>
                   </div>
-                ))}
+                </div>
+              </div>
 
-                <input
-                  type="text"
-                  maxLength={20}
-                  disabled={skills.length >= 12}
-                  value={newSkill}
-                  onChange={(e) => setNewSkill(e.target.value)}
-                  onKeyDown={handleAddSkill}
-                  placeholder={
-                    skills.length >= 12 ? "Max Reached" : "+ Add (Press Enter)"
-                  }
-                  className="px-3 py-1.5 bg-transparent border border-dashed border-[#3e000c]/40 rounded-full text-xs font-semibold text-[#3e000c] focus:outline-none focus:border-[#fb4b4e] w-36 disabled:opacity-50 disabled:cursor-not-allowed"
-                />
+              {/* Exact locked body code (Hard crop preview) */}
+              <div className="flex flex-wrap content-start gap-2 w-full flex-1 overflow-hidden pointer-events-none">
+                {skills.map((skill, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1.5 bg-[#ffcbdd]/30 border border-[#3e000c]/50 rounded-full text-xs font-semibold text-[#3e000c] whitespace-nowrap mb-0.5"
+                  >
+                    {skill}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -662,6 +726,176 @@ const EditProfile = () => {
             />
           </svg>
         </button>
+      </div>
+
+      {/* === THE EDITORIAL CANVAS (Cinematic Glow + Prominent Light Grid) === */}
+      <div
+        className={`fixed inset-0 z-[100] flex flex-col transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+          isSkillsExpanded
+            ? "opacity-100 pointer-events-auto bg-[#fdfafb]"
+            : "opacity-0 pointer-events-none translate-y-8 bg-transparent"
+        }`}
+      >
+        {/* Layer 1: Cinematic Soft Glow (Mesh Gradient) */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-[#ffcbdd] rounded-full mix-blend-multiply filter blur-[120px] opacity-80"></div>
+          <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-[#fb4b4e] rounded-full mix-blend-multiply filter blur-[150px] opacity-20"></div>
+          <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-[#f8e9ed] rounded-full mix-blend-multiply filter blur-[120px] opacity-90"></div>
+        </div>
+
+        {/* Layer 2: Prominent Architectural Light Grid */}
+        <div
+          className="absolute inset-0 pointer-events-none z-10"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(62, 0, 12, 0.06) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(62, 0, 12, 0.06) 1px, transparent 1px)
+            `,
+            backgroundSize: "32px 32px",
+          }}
+        ></div>
+
+        {/* Top Navigation Bar (Keeping your chosen Glassmorphic Glow error state!) */}
+        <div className="relative z-20 flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-6 sm:px-12 w-full shrink-0 gap-4 sm:gap-0">
+          <div className="flex items-center gap-3">
+            <span
+              className={`w-2 h-2 rounded-full ${skills.length >= 50 ? "bg-[#fb4b4e]" : "bg-[#3e000c]"} animate-pulse`}
+            ></span>
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-[#3e000c]">
+              Skills Canvas • {skills.length}/50
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4 self-end sm:self-auto">
+            {/* THE RED ERROR MESSAGE (Option 1: Glassmorphic Glow) */}
+            {skillError && (
+              <div className="hidden sm:flex items-center gap-2.5 px-5 py-2 bg-white/40 backdrop-blur-md rounded-full shadow-[0_8px_16px_rgba(251,75,78,0.15)] border border-[#fb4b4e]/30 transition-all duration-300">
+                <svg
+                  className="w-4 h-4 text-[#fb4b4e] shrink-0"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+                <span className="text-[10px] font-black tracking-widest uppercase text-[#fb4b4e] translate-y-[1px]">
+                  {skillError}
+                </span>
+              </div>
+            )}
+
+            {/* THE FIX: Button visually and functionally locks until they hit 6 skills */}
+            <button
+              onClick={handleSaveSkills}
+              disabled={skills.length < 6}
+              className={`flex items-center gap-2 px-6 py-2.5 rounded-full border-2 text-xs font-black uppercase tracking-widest transition-all duration-100 ${
+                skills.length >= 6
+                  ? "border-[#3e000c] bg-white text-[#3e000c] shadow-[4px_4px_0_#3e000c] hover:bg-[#fff5f7] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0_#3e000c] cursor-pointer"
+                  : "border-[#3e000c]/20 bg-[#fdfafb]/50 text-[#3e000c]/30 shadow-none cursor-not-allowed"
+              }`}
+            >
+              Save & Close
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Error Fallback */}
+        {skillError && (
+          <div className="sm:hidden w-full flex justify-center relative z-20 -mt-2 mb-4 px-6">
+            <div className="flex items-center justify-center gap-2.5 px-5 py-2 w-full bg-white/40 backdrop-blur-md rounded-full shadow-[0_8px_16px_rgba(251,75,78,0.15)] border border-[#fb4b4e]/30 transition-all duration-300">
+              <svg
+                className="w-3.5 h-3.5 text-[#fb4b4e] shrink-0"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                />
+              </svg>
+              <span className="text-[10px] font-black tracking-widest uppercase text-[#fb4b4e] translate-y-[1px]">
+                {skillError}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Main Centered Content */}
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center w-full max-w-5xl mx-auto px-6 sm:px-12 pb-20">
+          {/* Structured Massive Input */}
+          <div className="w-full relative mb-10 shrink-0 group">
+            <input
+              type="text"
+              maxLength={50}
+              disabled={skills.length >= 50}
+              value={newSkill}
+              onChange={(e) => setNewSkill(e.target.value)}
+              onKeyDown={handleAddSkill}
+              placeholder={
+                skills.length >= 50
+                  ? "Maximum capacity reached."
+                  : "Type a skill & press Enter..."
+              }
+              className="w-full text-center text-4xl sm:text-5xl md:text-6xl font-medium tracking-tighter text-[#3e000c] bg-transparent outline-none placeholder:text-[#3e000c]/20 pb-6 transition-all"
+              autoFocus={isSkillsExpanded}
+            />
+            {/* Animated Dashed Baseline */}
+            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[linear-gradient(to_right,#3e000c_50%,transparent_50%)] bg-[length:12px_2px] opacity-20 group-focus-within:opacity-100 group-focus-within:bg-[linear-gradient(to_right,#fb4b4e_50%,transparent_50%)] transition-all duration-300"></div>
+          </div>
+
+          {/* THE INTEGRATED PILL LIST */}
+          {/* THE FIX: Added pt-6 (padding-top) so the hover elements in the top row don't get clipped by the overflow-y container. Added pb-12 for bottom breathing room. */}
+          <div className="flex flex-wrap justify-center content-start gap-4 max-h-[50vh] overflow-y-auto w-full px-4 pt-6 pb-12 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {skills.map((skill, i) => (
+              <div
+                key={i}
+                className="group relative px-6 py-2.5 bg-white border-2 border-[#fb4b4e]/50 rounded-full text-base font-semibold text-[#3e000c] hover:bg-[#fff5f7] hover:border-[#fb4b4e] transition-all duration-300 cursor-default shadow-[2px_2px_0_rgba(62,0,12,0.05)] hover:shadow-[3px_3px_0_#fb4b4e] hover:-translate-y-0.5"
+              >
+                {/* Text with Zen strike-through on hover */}
+                <span className="group-hover:line-through decoration-2 decoration-[#fb4b4e]/50 transition-all duration-300">
+                  {skill}
+                </span>
+
+                {/* THE CROSS: No spin, just a clean scale-up pop, adjusted outward slightly so it doesn't crowd the text */}
+                <div
+                  onClick={() => removeSkill(skill)}
+                  className="absolute -top-2.5 -right-2.5 bg-[#fb4b4e] text-white rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 cursor-pointer shadow-[2px_2px_0_#3e000c] hover:scale-110 border-2 border-[#3e000c] transform scale-75 group-hover:scale-100"
+                >
+                  <svg
+                    className="w-3.5 h-3.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3.5}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+              </div>
+            ))}
+
+            {skills.length === 0 && (
+              <div className="w-full flex flex-col items-center justify-center mt-8 opacity-40">
+                <span className="text-4xl mb-3">🍃</span>
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-[#3e000c]">
+                  Your canvas is blank
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
